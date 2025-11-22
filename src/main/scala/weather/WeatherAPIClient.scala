@@ -21,9 +21,7 @@ object WeatherAPIClient {
       for
         gpr <- client.expect[GridpointResponse](apiBase / "points" / s"$lat,$lon")
         forecastUrl <- Uri.fromString(gpr.properties.forecast).liftTo[F]
-        forecastResponse <- client.expect[ForecastResponse](
-          gpr.properties.forecast
-        )
+        forecastResponse <- client.expect[ForecastResponse](gpr.properties.forecast)
         forecast <- forecastResponse.properties.periods.headOption
           .liftTo[F](new RuntimeException("Empty Forecast from NWS"))
       yield forecast
